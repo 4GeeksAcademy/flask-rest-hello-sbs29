@@ -12,7 +12,7 @@ class User(db.Model):
     is_active = db.Column(db.Boolean(), unique=False, nullable=False)
 
     def __repr__(self):
-        return '<User %r>' % self.username
+        return '<User %r>' % self.first_name + ' ' + self.last_name
 
     def serialize(self):
         return {
@@ -87,7 +87,7 @@ class FavoritePlanets(db.Model):
     __tablename__ = 'favorites_planets'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    planet_id = db.Column(db.Integer, db.ForeignKey('planets.id'))
+    planet_id = db.Column(db.Integer, db.ForeignKey('planets.id'), unique=True)
     user = db.relationship(User, backref="favorites_planets")
     planets = db.relationship(Planets)
 
@@ -98,7 +98,7 @@ class FavoritePlanets(db.Model):
         return {
             "id": self.id,
             "user": self.user.first_name,
-            "planet": self.planet.name
+            "planet": self.planets.name
         }
 
 
@@ -106,7 +106,7 @@ class FavoritePeople(db.Model):
     __tablename__ = 'favorites_people'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    people_id = db.Column(db.Integer, db.ForeignKey('people.id'))
+    people_id = db.Column(db.Integer, db.ForeignKey('people.id'), unique=True)
     user = db.relationship(User, backref="favorites_people")
     people = db.relationship(People)
 
